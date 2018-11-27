@@ -1,0 +1,33 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Jul 13 12:13:25 2015
+
+@author: Stefano
+"""
+def CheckSubstring(find_string, string_list):
+	for string in string_list:
+		if (len(string) < len(find_string)) or (find_string not in string):
+			return False
+	return True
+
+def ReadFASTAseq(input_file):
+    from Bio import SeqIO
+    sequences_list=[]
+    with open(input_file,'r') as input_data:
+        fasta_sequences = SeqIO.parse(input_data,'fasta')
+        for fasta in fasta_sequences:
+            sequences_list.append(fasta.seq.tostring())
+    return sequences_list
+            
+            
+ 
+l=ReadFASTAseq('rosalind_lcsm.txt')
+longest = ''
+for i in xrange(len(l[0])):
+    for j in xrange(len(l[0]), i, -1):
+        if j-i <= len(longest):
+                break
+        elif CheckSubstring(l[0][i:j],l):
+                longest = l[0][i:j]
+with open('ouputlcsm.txt','w') as out:
+    out.write(str(longest))
